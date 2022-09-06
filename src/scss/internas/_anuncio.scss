@@ -1,0 +1,14 @@
+.arrow{
+    position: relative;
+
+    a{
+        position: absolute;
+        top: 1.3rem;
+        color: $verde;
+
+        
+        &:hover{
+            color: darken($verde, 10) ;
+        }
+    }
+}
