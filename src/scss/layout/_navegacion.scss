@@ -15,6 +15,7 @@
 
         &:hover{
             cursor: pointer;
+            filter: invert(0%);
         }
 
         @include tablet{
@@ -39,9 +40,10 @@
 
 .navegacion{
 
+    height: 0;
     visibility: hidden;
     opacity: 0;
-    transition: visibility .2s ease-in-out, opacity .5s linear;
+    transition: visibility .2s ease-in-out, opacity .3s linear, height 0.5s linear;
 
     @include tablet{
         visibility: visible;
@@ -65,6 +67,11 @@
                 margin-right: 0;
             }
         };
+
+        &:hover{
+            color: $verde;
+        }
+    
     }
 }
 
@@ -84,4 +91,5 @@
 .mostrar{
     visibility: visible;
     opacity: 1;
+    height: auto;
 }

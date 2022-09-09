@@ -2,8 +2,24 @@ document.addEventListener('DOMContentLoaded',function(){
 
     eventListeners();
 
+    modeDark();
 
 });
+
+function modeDark() {
+
+    const darkModeBoton = document.querySelector('.dark-mode-boton');
+
+    darkModeBoton.addEventListener('click', function(){
+        document.body.classList.toggle('dark-mode');
+
+        // if(darkModeBoton.classList.contains('dark-mode')){
+        //     darkModeBoton.classList.remove('dark-mode');
+        // } else {
+        //     darkModeBoton.classList.add('dark-mode')
+        // };
+    });
+};
 
 function eventListeners(){
     const mobileMenu = document.querySelector('.mobile-menu');
