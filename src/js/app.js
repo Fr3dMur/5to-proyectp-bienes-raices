@@ -17,12 +17,17 @@ function modeDark() {
     }
 
     prefiereDarkMode.addEventListener('change', function(){
-        
-    if(prefiereDarkMode.matches) {
-        document.body.classList.add('dark-mode')
-    } else {
-        document.body.classList.remove('dark-mode')
-    }
+            
+        if(prefiereDarkMode.matches) {
+            if(prefiereDarkMode.matches) {
+                document.body.classList.add('dark-mode')
+            } else {
+                document.body.classList.remove('dark-mode')
+            }
+            document.body.classList.add('dark-mode')
+        } else {
+            document.body.classList.remove('dark-mode')
+        }
     })
 
     const darkModeBoton = document.querySelector('.dark-mode-boton');
