@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <header class="header inicio">
+    <header class="header <?php echo isset($inicio) ? 'inicio' : ''; ?>">
         <div class="contenedor contenido-header">
             <div class="barra">
                 <a href="/">
@@ -30,8 +30,5 @@
                     </nav>
                 </div>
             </div> <!-- CIERRE DE LA BARRA -->
-
-        <h1>Venta de Casas y Departamentos de Exclusivos de Lujo</h1>
-
         </div>
     </header>

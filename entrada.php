@@ -2,7 +2,7 @@
 
     <main class="contenedor seccion contenido-centrado">
         <div class="arrow">
-            <a href="blog.html">
+            <a href="blog.php">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M20 15h-8v3.586a1 1 0 0 1 -1.707 .707l-6.586 -6.586a1 1 0 0 1 0 -1.414l6.586 -6.586a1 1 0 0 1 1.707 .707v3.586h8a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1z" />
@@ -31,21 +31,4 @@
         </div>
     </main>
 
-    <footer class="footer seccion">
-        <div class="contenedor contenedor-footor">
-            <nav class="navegacion">
-                <a href="nosotros.html">Nosotros</a>
-                <a href="anuncios.html">Anuncios</a>
-                <a href="blog.html">Blog</a>
-                <a href="contacto.html">Contacto</a>
-            </nav>
-        </div>
-        <p class="copyright">Todos los derechos reservados 2022. ©</p>
-    </footer>
-
-
-
-
-    <script src="build/js/bundle.min.js"></script>
-</body>
-</html>
+<?php  include 'includes/templates/footer.php';?>
