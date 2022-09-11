@@ -21,7 +21,13 @@
                 </div>
 
                 <div class="derecha">
-                    <img src="/build/img/dark-mode.svg" alt="boton para dark-mode" class="dark-mode-boton">
+
+                    <div class="dark-mode-boton ">
+                    <!-- <img src="/build/img/dark-mode.svg" alt="boton para dark-mode" class="dark-mode-boton luna">
+                    <img src="/build/img/Sun_mode.svg" alt="boton para dark mode" class="dark-mode-boton sun"> -->
+                </div>
+
+
                     <nav class="navegacion">
                         <a href="../../nosotros.php">Nosotros</a>
                         <a href="../../anuncios.php">Anuncios</a>

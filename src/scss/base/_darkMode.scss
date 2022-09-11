@@ -1,3 +1,21 @@
+.dark-mode-boton{
+    background-image: url(/build/img/Sun_mode.svg);
+    height: 3rem;
+    width: 3rem;
+    background-repeat: no-repeat;
+    transition: background-image .3s linear;
+}
+
+.change{
+    transition: background-image .3s linear;
+    background-image: url(/build/img/dark-mode.svg);
+}
+
+.derecha .dark-mode-boton{
+    margin-bottom: 0;
+    
+}
+
 .dark-mode{
     background-color: darken($grisOscuro, 10);
 
@@ -41,3 +59,8 @@
     }
     
 };
+
+.contenedor-dark{
+    @include grid(2, 2rem)
+}
+

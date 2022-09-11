@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded',function(){
 
 });
 
+
+//CODIGO DE MODO OSCURO
 function modeDark() {
 
+    // SELECCIONAR TEMA POR DEFECTO
     const prefiereDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
 
     if(prefiereDarkMode.matches) {
@@ -28,12 +31,20 @@ function modeDark() {
         } else {
             document.body.classList.remove('dark-mode')
         }
-    })
+    });
 
     const darkModeBoton = document.querySelector('.dark-mode-boton');
 
+
+
+    
+
     darkModeBoton.addEventListener('click', function(){
         document.body.classList.toggle('dark-mode');
+        darkModeBoton.classList.toggle('change');
+        
+
+
 
         // if(darkModeBoton.classList.contains('dark-mode')){
         //     darkModeBoton.classList.remove('dark-mode');
@@ -42,6 +53,8 @@ function modeDark() {
         // };
     });
 };
+
+// CODIGO PARA MENU DE HAMBURGUESA
 
 function eventListeners(){
     const mobileMenu = document.querySelector('.mobile-menu');
