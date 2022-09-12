@@ -1,92 +1,93 @@
 <?php  
     // Base de Datos
-    require '../../includes/templates/config/database.php';
-    $db = conectarDB();
+require '../../includes/templates/config/database.php';
+$db = conectarDB();
 
     // CONSULTA PARA OBTENER LOS VENDEDORES
-    $consulta = "SELECT * FROM vendedores";
-    $resultado = mysqli_query($db, $consulta);
+$consulta = "SELECT * FROM vendedores";
+$resultado = mysqli_query($db, $consulta);
 
     // ARREGLO CON MENSAJE DE ERRORES
-    $errores = [];
+$errores = [];
 
     // VARIABLES DE LA BASE DE DATOS
-    $titulo = '';
-    $precio = '';
-    $descripcion = '';
-    $habitaciones = '';
-    $wc = '';
-    $estacionamiento = '';
-    $vendedores_id = '';
+$titulo = '';
+$precio = '';
+$descripcion = '';
+$habitaciones = '';
+$wc = '';
+$estacionamiento = '';
+$vendedores_id = '';
 
 
 // EJECUTA EL CODGIGO, LUEGO DE QUE EL USUARIO LLENA ES FORMULARIO
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+    $numero = 'hola1';
+    $numero2 = 'tu no mete cabra';
+
+    //SANITIZAR
+    $resultado = filter_var($numero, FILTER_SANITIZE_NUMBER_INT);
+    $resultado = filter_var($numero2, FILTER_VALIDATE_INT);
+
+    var_dump($resultado);
+
+    exit;
         // echo '<pre>';
         //     var_dump($_POST);
         // echo '</pre>';
 
-        $titulo = $_POST['titulo'];
-        $precio = $_POST['precio'];
-        $descripcion = $_POST['descripcion'];
-        $habitaciones = $_POST['habitaciones'];
-        $wc = $_POST['wc'];
-        $estacionamiento = $_POST['estacionamiento'];
-        $vendedores_id = $_POST['vendedor'];
-        $creado = date('Y/m/d');
+    $titulo = mysqli_real_escape_string( $db , $_POST['titulo'] );
+    $precio = mysqli_real_escape_string( $db , $_POST['precio'] );
+    $descripcion = mysqli_real_escape_string( $db , $_POST['descripcion'] );
+    $habitaciones = mysqli_real_escape_string( $db , $_POST['habitaciones'] );
+    $wc = mysqli_real_escape_string( $db , $_POST['wc'] );
+    $estacionamiento = mysqli_real_escape_string( $db , $_POST['estacionamiento'] );
+    $vendedores_id = mysqli_real_escape_string( $db , $_POST['vendedor'] );
+    $creado = date('Y/m/d');
 
-        // REVISAR QUE CADA CAMPO TENGA SUS VALORES ASIGNADOS
-        if(!$titulo) {
-            $errores[] = "Debes insertar un titulo";
-        }
+    // REVISAR QUE CADA CAMPO TENGA SUS VALORES ASIGNADOS
+    if(!$titulo) {
+        $errores[] = "Debes insertar un titulo";
+    }
+    if(!$precio) {
+        $errores[] = "Debes insertar un precio";
+    }
+    if(!$descripcion || strlen($descripcion) < 50) {
+        $errores[] = "La descripcion es obligatorio, y debe tener al menos 50 caracteres";
+    }
+    if(!$habitaciones) {
+        $errores[] = "Debes insertar habitaciones";
+    }
+    if(!$wc) {
+        $errores[] = "Debes insertar los wc";
+    }
+    if(!$estacionamiento) {
+        $errores[] = "Debes insertar los estacionamientos";
+    }
 
-        if(!$precio) {
-            $errores[] = "Debes insertar un precio";
-        }
-
-        if(!$descripcion || strlen($descripcion) < 50) {
-            $errores[] = "La descripcion es obligatorio, y debe tener al menos 50 caracteres";
-        }
-
-        if(!$habitaciones) {
-            $errores[] = "Debes insertar habitaciones";
-        }
-
-        if(!$wc) {
-            $errores[] = "Debes insertar los wc";
-        }
-
-        if(!$estacionamiento) {
-            $errores[] = "Debes insertar los estacionamientos";
-        }
-
-        if(!$vendedores_id) {
-            $errores[] = "Debes elegir un vendedor";
-        }
+    if(!$vendedores_id) {
+        $errores[] = "Debes elegir un vendedor";
+    }
         
         // REVISAR QUE EL ARRAY DE ERRORES ESTE VACIO
 
-        if(empty($errores)){
+if(empty($errores)){
+    // INSERTAR EN LA BARRA DE DATOS
+    $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id')";
             
-                    // INSERTAR EN LA BARRA DE DATOS
-                    $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id')";
+    //ENVIAR AL SERVIDOR
+    $resultado = mysqli_query($db, $query);
             
-                    //ENVIAR AL SERVIDOR
-                    $resultado = mysqli_query($db, $query);
-            
-                    if($resultado) {
-                        // REDIRECCIONAR A USUARIOS
-
-                        header('Location: /admin');
-                    }
-
-        }
-
-
+    if($resultado) {
+        // REDIRECCIONAR A USUARIO
+        header('Location: /admin');
     }
+}
+}
 
-    require '../../includes/funciones.php';
-    incluirTemplate('header');
+require '../../includes/funciones.php';
+incluirTemplate('header');
 ?>
 
 
@@ -181,7 +182,7 @@
                         <option value=" " selected>-- Seleccione --</option>
                         <?php while($vendedor = mysqli_fetch_assoc($resultado) ) : ?>
                             <option <?php echo $vendedores_id === $vendedor['id'] ? 'selected' : ''; ?> 
-                                    value="<?php echo $vendedor['id']?>">
+                                    value="<?php echo $vendedor['id']?>"  >
                                 <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']?>
                             </option>
                         <?php endwhile; ?>
