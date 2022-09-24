@@ -1,41 +1,43 @@
 <?php  
+    
+    $id = $_GET['id'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+
+    // Validar que la URL tenga un ID(INT)
+    if(!$id) {
+        header('Location: /admin/index.php');
+    }
+
     // Base de Datos
-require '../../includes/templates/config/database.php';
-$db = conectarDB();
+    require '../includes/templates/config/database.php';
+    $db = conectarDB();
+
+    // Obtener los datos de la propiedad
+    $consulta = "SELECT * FROM propiedades WHERE id = ${id}";
+    $resultado = mysqli_query($db, $consulta);
+    $propiedad = mysqli_fetch_assoc($resultado);
+
 
     // CONSULTA PARA OBTENER LOS VENDEDORES
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db, $consulta);
+    $consulta = "SELECT * FROM vendedores";
+    $resultado = mysqli_query($db, $consulta);
 
     // ARREGLO CON MENSAJE DE ERRORES
-$errores = [];
+    $errores = [];
 
-    // VARIABLES DE LA BASE DE DATOS
-$titulo = '';
-$precio = '';
-$descripcion = '';
-$habitaciones = '';
-$wc = '';
-$estacionamiento = '';
-$vendedores_id = '';
-
+    // VARIABLES PARA LLENAR LOS CAMPOS 
+    $titulo = $propiedad['titulo'];
+    $precio = $propiedad['precio'];
+    $descripcion = $propiedad['descripcion'];
+    $habitaciones = $propiedad['habitaciones'];
+    $wc = $propiedad['wc'];
+    $estacionamiento = $propiedad['estacionamiento'];
+    $vendedores_id = $propiedad['vendedores_id'];
+    $imagenPropiedad = $propiedad['imagen'];
 
 // EJECUTA EL CODGIGO, LUEGO DE QUE EL USUARIO LLENA ES FORMULARIO
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-    $numero = 'hola1';
-    $numero2 = 'tu no mete cabra';
-
-    //SANITIZAR
-    $resultado = filter_var($numero, FILTER_SANITIZE_NUMBER_INT);
-    $resultado = filter_var($numero2, FILTER_VALIDATE_INT);
-
-    // var_dump($resultado);
-
-    // echo '<pre>';
-    //     var_dump($_POST);
-    // echo '</pre>';
-    
     $titulo = mysqli_real_escape_string( $db , $_POST['titulo'] );
     $precio = mysqli_real_escape_string( $db , $_POST['precio'] );
     $descripcion = mysqli_real_escape_string( $db , $_POST['descripcion'] );
@@ -78,10 +80,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $errores[] = "Debes elegir un vendedor";
     };
 
-    if(!$imagen['name'] || $imagen['error']){
-        $errores[] = "La imagen es requerida";
-    };
-
     // Validar size de la imagen (100 kb max)
     $medida = 1000 * 100;
 
@@ -90,43 +88,57 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 
     // REVISAR QUE EL ARRAY DE ERRORES ESTE VACIO
-if(empty($errores)){
-    /**SUBIDA DE ARCHIVOS */
+    if(empty($errores)){
+    
+        //CREAR CARPETA
+         $carpetaImagenes = '../imagenes/';
+    
+        if(!is_dir($carpetaImagenes)){
+            mkdir($carpetaImagenes);
+        };
 
-    //CREAR CARPETA
-    $carpetaImagenes = '../../imagenes/';
+    $nombreImagen = '';
+    
+    /** SUBIDA DE ARCHIVOS  */
 
-    if(!is_dir($carpetaImagenes)){
-        mkdir($carpetaImagenes);
-    };
+    if($imagen['name']){
 
-    //GENERAR UN NOMBRE UNICO
-    $nombreImagen = md5(uniqid(rand(), true ) ) . ".jpg";
+        // Eliminar la imagen previa
+        unlink($carpetaImagenes . $propiedad['imagen']);
+ 
+        //GENERAR UN NOMBRE UNICO
+        $nombreImagen = md5(uniqid(rand(), true ) ) . ".jpg";
 
-    //SUBIR LA IMAGEN
-    move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+        //SUBIR LA IMAGEN
+        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+
+    } else {
+        $nombreImagen = $propiedad['imagen'];
+    }
+
 
     // INSERTAR EN LA BARRA DE DATOS
-    $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id')";
-            
+    $query = "UPDATE propiedades SET titulo = '${titulo}', precio = ${precio}, imagen = '${nombreImagen}', descripcion = '${descripcion}', habitaciones = ${habitaciones}, wc = ${wc}, estacionamiento = ${estacionamiento}, vendedores_id = ${vendedores_id} WHERE id = ${id}";
+
+
     //ENVIAR AL SERVIDOR
     $resultado = mysqli_query($db, $query);
-            
+
     if($resultado) {
         // REDIRECCIONAR A USUARIO
-        header('Location: /admin/index.php?resultado=1');
+        header('Location: /admin/index.php?resultado=2');
     }
 }
 }
 
-require '../../includes/funciones.php';
+require '../includes/funciones.php';
 incluirTemplate('header');
 ?>
 
 
 <!-- CODIGO HTML DE LA PAGINA -->
     <main class="contenedor">
-        <h1>Crear</h1>
+        <h1>Actualizar Propiedad</h1>
 
         <a href="/admin/" class="boton boton-verde">Volver</a>
 
@@ -138,7 +150,7 @@ incluirTemplate('header');
         <?php endforeach; ?>
 
 
-        <form action="/admin/propiedades/crear.php" class="formulario" method="POST" enctype="multipart/form-data">
+        <form class="formulario" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <legend>Informacion General</legend>
 
@@ -164,6 +176,8 @@ incluirTemplate('header');
                             id="imagen" 
                             accept="image/jpeg, image/png"
                      >
+
+                     <img src="/imagenes/<?php echo $imagenPropiedad ?>" alt="Imagen de la Propiedad Asignada" class="imagen-small">
 
                     <label for="descripcion">Descripcion:</label>
                     <textarea name="descripcion" 
@@ -220,7 +234,7 @@ incluirTemplate('header');
                     </select>
             </fieldset>
 
-            <input type="submit" value="Enviar" class="boton boton-verde">
+            <input type="submit" value="Actualizar" class="boton boton-verde">
         </form>
 
     </main>
