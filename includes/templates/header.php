@@ -36,5 +36,10 @@
                     </nav>
                 </div>
             </div> <!-- CIERRE DE LA BARRA -->
+
+            <?php 
+                echo $inicio ? "<h1>Venta de Casas y Departamentos Exclusivos de lujo </h1>" : '' ;
+            ?>
+
         </div>
     </header>
