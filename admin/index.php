@@ -1,4 +1,13 @@
 <?php  
+
+    require '../includes/funciones.php';
+    // El usuario esta autenticado
+    $auth = estaAutenticado();
+            
+    if(!$auth){
+        header('Location: /');
+    }
+
                         // DATA BASE //
 
     // Importar la Conexion
@@ -41,7 +50,7 @@
 
 
     // Incluye un template
-    require '../includes/funciones.php';
+    
     incluirTemplate('header');
 
 ?>
