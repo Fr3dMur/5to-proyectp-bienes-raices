@@ -1,10 +1,4 @@
 <?php  
-    /** DATA BASE */
-
-        // // IMPORTAR CONEXION
-        // require 'includes/templates/config/database.php';
-        // $db = conectarDB();
-
         // // ESCRIBIR EL QUERY
         // $query = "SELECT * FROM propiedades";
 
@@ -12,10 +6,8 @@
         // $resultadoConsulta = mysqli_query($db, $query);
 
     /**  CONSULTAR DATABASE, PARA DATOS ANUNCIOS */
-
-
-
     require 'includes/app.php';
+
     incluirTemplate('header', $inicio = true);
 ?>
 
