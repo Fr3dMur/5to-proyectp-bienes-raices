@@ -1,7 +1,7 @@
 <?php  
 require '../../includes/App.php';
 use App\Propiedad;
-use intervention\image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManagerStatic as Image;
 
     // El usuario esta autenticado
 estaAutenticado();
@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     // SETEAR LA IMAGEN
     // Realiza un resize a la imagen con intervention
-    if($_FILES['image']['tmp_name']){
+    if($_FILES['imagen']['tmp_name']){
         $image = Image::make($_FILES['imagen']['tmp_name'])->fit(800,600);
         $propiedad->setImagen($nombreImagen);
     }
@@ -50,11 +50,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $errores = $propiedad->validar();
 
 if(empty($errores)){
-    // GUARDAR EN DB
-    $propiedad->guardar();
+
+    // Crear la carpeta para subir imagenes
+    if(!is_dir(CARPETA_IMAGENES)){
+        mkdir(CARPETA_IMAGENES);
+    }
 
     // Guarda la imagen en el servidor
     $image->save($carpetaImagenes . $nombreImagen);
+
+    // Guarda en la base de datos
+    $resultado = $propiedad->guardar();
+
 
     if($resultado) {
         // REDIRECCIONAR A USUARIO

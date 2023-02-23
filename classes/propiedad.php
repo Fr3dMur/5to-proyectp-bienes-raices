@@ -54,7 +54,7 @@ class Propiedad {
    // debuggear($query);
 //Get result from Query
    $resultado = self::$db->query($query);
-   // debuggear($resultado);
+   return $resultado;
 }
 
    public function atributos(){
@@ -119,16 +119,10 @@ class Propiedad {
       self::$errores[] = "Debes elegir un vendedor";
    };
 
-   // if(!$this->imagen['name'] || $this->imagen['error']){
-   //       $errores[] = "La imagen es requerida";
-   // };
+   if(!$this->imagen){
+         self::$errores[] = "La imagen es requerida";
+   };
 
-   // // Validar size de la imagen (100 kb max)
-   // $medida = 1000 * 100;
-
-   // if($this->imagen['size'] > $medida){
-   //       $errores[] = "La imagen es muy grande, 100kb MAX";
-   // }
       return self::$errores;
    }
 };
