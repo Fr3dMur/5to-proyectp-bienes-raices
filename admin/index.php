@@ -1,17 +1,13 @@
 <?php  
 
-    require '../includes/funciones.php';
+    require '../includes/App.php';
     // El usuario esta autenticado
-    $auth = estaAutenticado();
-            
-    if(!$auth){
-        header('Location: /');
-    }
+   estaAutenticado();
+
 
                         // DATA BASE //
 
     // Importar la Conexion
-    require '../includes/templates/config/database.php';
     $db = conectarDB();
 
     // Escribir el Query

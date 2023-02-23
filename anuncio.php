@@ -11,7 +11,8 @@ if(!$id) {
 /** DATA BASE */
 
     // IMPORTAR CONEXION
-    require __DIR__ . '/includes/templates/config/database.php' ;
+    require 'includes/App.php';
+
     $db = conectarDB();
 
     // CONSULTAR DATABASE
@@ -25,7 +26,6 @@ if(!$id) {
         header('Location: /');
     };
     
-    require 'includes/funciones.php';
     incluirTemplate('header');
     
     ?>

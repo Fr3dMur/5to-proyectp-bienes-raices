@@ -1,0 +1,19 @@
+{
+    "name": "muril/5to-proyectp-bienes-raices",
+    "description": "Creando un proyecto con POO",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Fr3dMur",
+            "email": "murillo.freddy2002@gmail.com"
+        }
+    ],
+    "require": {
+        "intervention/image": "^2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\" :"./classes"
+        }
+    }
+}

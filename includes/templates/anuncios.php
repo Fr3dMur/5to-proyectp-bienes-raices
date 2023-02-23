@@ -3,7 +3,6 @@
     /** DATA BASE */
 
         // IMPORTAR CONEXION
-        require __DIR__ . '/config/database.php' ;
         $db = conectarDB();
 
         // CONSULTAR DATABASE

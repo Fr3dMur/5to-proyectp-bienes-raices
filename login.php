@@ -1,6 +1,7 @@
-<?php 
+<?php
 // Importar Conexion DB
-    require 'includes/templates/config/database.php';
+require 'includes/App.php';
+
     $db = conectarDB();
 
 // Autenticar el Usuario
@@ -14,7 +15,7 @@
         if(!$email){
             $errores[] = "El email es obligatorio o no es valido";
         }
-        
+
         if(!$password){
             $errores[] = "El password es obligatorio";
         }
@@ -27,7 +28,7 @@
             if($resultado->num_rows){
                 // Revisar si el password es Correcto
                 $usuario = mysqli_fetch_assoc($resultado);
-                
+
                 // Verificar si el password es correcto o no
                 $auth = password_verify($password, $usuario['password']);
 
@@ -39,12 +40,12 @@
                     $_SESSION['usuario'] = $usuario['email'];
                     $_SESSION['login'] = true ;
 
-                    
+
                 } else {
                     $errores[] = "El password es incorrecto";
                 }
 
-            } else {    
+            } else {
                 $errores[] = "El usuario no existe";
             }
         }
@@ -52,7 +53,6 @@
     }
 
 // Incluye el Header
-    require 'includes/funciones.php';
     incluirTemplate('header');
 ?>
 
@@ -79,6 +79,6 @@
     </form>
 </main>
 
-<?php 
+<?php
     incluirTemplate('footer');
 ?>

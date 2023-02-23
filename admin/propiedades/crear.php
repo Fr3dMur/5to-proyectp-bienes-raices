@@ -1,14 +1,11 @@
 <?php  
-require '../../includes/funciones.php';
+require '../../includes/App.php';
+use App\Propiedad;
+use intervention\image\ImageManagerStatic as Image;
+
     // El usuario esta autenticado
-    $auth = estaAutenticado();
-            
-    if(!$auth){
-        header('Location: /');
-    }
-    
-    // Base de Datos
-require '../../includes/templates/config/database.php';
+estaAutenticado();
+
 $db = conectarDB();
 
     // CONSULTA PARA OBTENER LOS VENDEDORES
@@ -16,7 +13,7 @@ $consulta = "SELECT * FROM vendedores";
 $resultado = mysqli_query($db, $consulta);
 
     // ARREGLO CON MENSAJE DE ERRORES
-$errores = [];
+$errores = Propiedad::getErrores();
 
     // VARIABLES DE LA BASE DE DATOS
 $titulo = '';
@@ -30,96 +27,35 @@ $vendedores_id = '';
 
 // EJECUTA EL CODGIGO, LUEGO DE QUE EL USUARIO LLENA ES FORMULARIO
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-    $numero = 'hola1';
-    $numero2 = 'tu no mete cabra';
-
-    //SANITIZAR
-    $resultado = filter_var($numero, FILTER_SANITIZE_NUMBER_INT);
-    $resultado = filter_var($numero2, FILTER_VALIDATE_INT);
-
-    // var_dump($resultado);
-
-    // echo '<pre>';
-    //     var_dump($_POST);
-    // echo '</pre>';
-    
-    $titulo = mysqli_real_escape_string( $db , $_POST['titulo'] );
-    $precio = mysqli_real_escape_string( $db , $_POST['precio'] );
-    $descripcion = mysqli_real_escape_string( $db , $_POST['descripcion'] );
-    $habitaciones = mysqli_real_escape_string( $db , $_POST['habitaciones'] );
-    $wc = mysqli_real_escape_string( $db , $_POST['wc'] );
-    $estacionamiento = mysqli_real_escape_string( $db , $_POST['estacionamiento'] );
-    $vendedores_id = mysqli_real_escape_string( $db , $_POST['vendedor'] );
-    $creado = date('Y/m/d');
-    
-    // ASIGNAR FILES A UNA VARIABLE
-    $imagen = $_FILES['imagen'];
-  
-
-    // REVISAR QUE CADA CAMPO TENGA SUS VALORES ASIGNADOS
-    if(!$titulo) {
-        $errores[] = "Debes insertar un titulo";
-    };
-
-    if(!$precio) {
-        $errores[] = "Debes insertar un precio";
-    };
-
-    if(!$descripcion || strlen($descripcion) < 50) {
-        $errores[] = "La descripcion es obligatorio, y debe tener al menos 50 caracteres";
-    };
-
-    if(!$habitaciones) {
-        $errores[] = "Debes insertar habitaciones";
-    };
-
-    if(!$wc) {
-        $errores[] = "Debes insertar los wc";
-    };
-
-    if(!$estacionamiento) {
-        $errores[] = "Debes insertar los estacionamientos";
-    };
-
-    if(!$vendedores_id) {
-        $errores[] = "Debes elegir un vendedor";
-    };
-
-    if(!$imagen['name'] || $imagen['error']){
-        $errores[] = "La imagen es requerida";
-    };
-
-    // Validar size de la imagen (100 kb max)
-    $medida = 1000 * 100;
-
-    if($imagen['size'] > $medida){
-        $errores[] = "La imagen es muy grande, 100kb MAX";
-    }
-
-    // REVISAR QUE EL ARRAY DE ERRORES ESTE VACIO
-if(empty($errores)){
-    /**SUBIDA DE ARCHIVOS */
+    // Crea una nueva instancia
+    $propiedad = new Propiedad($_POST);
 
     //CREAR CARPETA
     $carpetaImagenes = '../../imagenes/';
-
     if(!is_dir($carpetaImagenes)){
-        mkdir($carpetaImagenes);
-    };
-
-    //GENERAR UN NOMBRE UNICO
+       mkdir($carpetaImagenes);
+    }; 
+   
+    //GENERA UN NOMBRE UNICO
     $nombreImagen = md5(uniqid(rand(), true ) ) . ".jpg";
 
-    //SUBIR LA IMAGEN
-    move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+    // SETEAR LA IMAGEN
+    // Realiza un resize a la imagen con intervention
+    if($_FILES['image']['tmp_name']){
+        $image = Image::make($_FILES['imagen']['tmp_name'])->fit(800,600);
+        $propiedad->setImagen($nombreImagen);
+    }
 
-    // INSERTAR EN LA BARRA DE DATOS
-    $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id')";
-            
-    //ENVIAR AL SERVIDOR
-    $resultado = mysqli_query($db, $query);
-            
+    // VALIDAR
+    $errores = $propiedad->validar();
+
+if(empty($errores)){
+    // GUARDAR EN DB
+    $propiedad->guardar();
+
+    // Guarda la imagen en el servidor
+    $image->save($carpetaImagenes . $nombreImagen);
+
     if($resultado) {
         // REDIRECCIONAR A USUARIO
         header('Location: /admin/index.php?resultado=1');
