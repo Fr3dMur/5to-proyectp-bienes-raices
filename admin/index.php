@@ -4,9 +4,11 @@ require '../includes/App.php';
 estaAutenticado();
 
 use App\Propiedad;
+use App\Vendedor;
 
 // Implementar un metodo para obtener todas las propiedades
 $propiedades = Propiedad::all();
+$vendedor = Vendedor::all();
 
 // Muestra mensaje condicional
 $resultado = $_GET['resultado'] ?? null;
@@ -17,21 +19,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $id = filter_var($id, FILTER_VALIDATE_INT);
 
     if($id){
-    // ELIMINAR IMAGEN DEL SERVIDOR
-        $query = "SELECT imagen FROM propiedades WHERE id = ${id}";
-        $resultado = mysqli_query($db, $query);
+        $propiedad = Propiedad::find($id);
 
-        $propiedad = mysqli_fetch_assoc($resultado);
-        unlink('../imagenes/' . $propiedad['imagen']);
-          
-
-        // ELIMINAR PROPIEDAD DE LA DB
-        $query = "DELETE FROM propiedades WHERE id = ${id}";
-        $resultado = mysqli_query($db, $query);
-
-        if($resultado){
-            header('location: /admin/index.php?resultado=3');
-        }
+        $propiedad->Eliminar();
     }
 }
 

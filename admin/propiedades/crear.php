@@ -62,13 +62,7 @@ if(empty($errores)){
     $image->save($carpetaImagenes . $nombreImagen);
 
     // Guarda en la base de datos
-    $resultado = $propiedad->guardar();
-
-
-    if($resultado) {
-        // REDIRECCIONAR A USUARIO
-        header('Location: /admin/index.php?resultado=1');
-    }
+    $propiedad->guardar();
 }
 }
 
