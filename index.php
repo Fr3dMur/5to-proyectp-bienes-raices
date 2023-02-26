@@ -1,13 +1,6 @@
 <?php  
-        // // ESCRIBIR EL QUERY
-        // $query = "SELECT * FROM propiedades";
-
-        // // CONSULTAR DATABASE
-        // $resultadoConsulta = mysqli_query($db, $query);
-
-    /**  CONSULTAR DATABASE, PARA DATOS ANUNCIOS */
     require 'includes/app.php';
-
+    use App\Propiedad;
     incluirTemplate('header', $inicio = true);
 ?>
 
@@ -40,7 +33,6 @@
         <h2>Casas y Depas en Venta</h2>
             
                 <?php 
-                $limite = 3;
                 include 'includes/templates/anuncios.php' ; 
                 ?>
          

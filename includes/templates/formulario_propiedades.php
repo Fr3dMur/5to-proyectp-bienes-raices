@@ -7,8 +7,9 @@
                             name="propiedad[titulo]" 
                             id="titulo" 
                             placeholder="Titulo Propiedad" 
-                            value="<?php echo s($propiedad->titulo) ;?>"
-                    >
+                            value="<?php
+                                use App\Propiedad;
+                                echo s($propiedad->titulo) ;?> ">
 
                     <label for="precio">Precio:</label>
                     <input type="number" 
@@ -72,5 +73,15 @@
 
             <fieldset>
                 <legend>Vendedor</legend>
-                 
+                <label for="vendedor">Vendedor</label>
+                 <select name="propiedad[vendedorId" id="vendedor">
+                        <option value="" selected>-- Seleccione --</option>
+                        <?php foreach($vendedores as $vendedor){ ?>
+                            <option 
+                            <?php echo $propiedad->vendedores_id === $vendedor->id ? 'Selected' : '1' ?>
+                            value="<?php echo s($vendedor->id)?>">
+                            <?php echo s($vendedor->nombre) . " " . s($vendedor->apellido) ?>
+                            </option>
+                        <?php } ?>
+                 </select>
             </fieldset>

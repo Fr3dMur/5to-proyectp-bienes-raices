@@ -1,37 +1,30 @@
 <?php
-
-use App\Propiedad;
-use Intervention\Image\ImageManagerStatic as Image;
-
 require '../includes/app.php';
+use App\Propiedad;
+use App\Vendedor;
+use Intervention\Image\ImageManagerStatic as Image;
 // El usuario esta autenticado
 estaAutenticado();
 
+// Validar que haya un ID valido
 $id = $_GET['id'];
 $id = filter_var($id, FILTER_VALIDATE_INT);
-
-// Validar que la URL tenga un ID(INT)
 if (!$id) {
     header('Location: /admin/index.php');
 }
 
 // Obtener los datos de la propiedad
-$propiedad = Propiedad::find($id);
+$vendedor = Propiedad::find($id);
 
-
-// CONSULTA PARA OBTENER LOS VENDEDORES
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db, $consulta);
+// Consulta para obtener todos los vendedores
+$vendedores = Propiedad::all($id);
 
 // ARREGLO CON MENSAJE DE ERRORES
 $errores = Propiedad::getErrores();
 
-
 // EJECUTA EL CODGIGO, LUEGO DE QUE EL USUARIO LLENA ES FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $propiedad->sincronizar($_POST);
-
     // Asignar los atributos
     $args = $_POST['propiedad'];
 

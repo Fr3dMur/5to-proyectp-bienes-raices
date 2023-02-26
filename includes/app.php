@@ -8,10 +8,10 @@ require __DIR__ . '/../vendor/autoload.php';
 $db = conectarDB();
 $db->set_charset('utf8');
 
-use App\Propiedad;
+use App\ActiveRecord;
 
-$propiedad = new Propiedad();
+$active = new ActiveRecord();
 
-$propiedad::setDB($db);
+$active::setDB($db);
 
 // var_dump($propiedad);

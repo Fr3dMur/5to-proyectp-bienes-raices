@@ -1,18 +1,18 @@
 <?php  
 require '../../includes/App.php';
 use App\Propiedad;
+use App\Vendedor;
 use Intervention\Image\ImageManagerStatic as Image;
 
-    // El usuario esta autenticado
+// El usuario esta autenticado
 estaAutenticado();
 
 $db = conectarDB();
 
 $propiedad = new Propiedad();
 
-    // CONSULTA PARA OBTENER LOS VENDEDORES
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db, $consulta);
+// Consulta para obtener todos los vendedores
+    $vendedores = Vendedor::all();
 
     // ARREGLO CON MENSAJE DE ERRORES
 $errores = Propiedad::getErrores();
@@ -72,7 +72,7 @@ incluirTemplate('header');
 
 <!-- CODIGO HTML DE LA PAGINA -->
     <main class="contenedor">
-        <h1>Crear</h1>
+        <h1>Registrar Nueva Propiedad</h1>
 
         <a href="/admin/" class="boton boton-verde">Volver</a>
 

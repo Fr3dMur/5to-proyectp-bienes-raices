@@ -1,39 +1,18 @@
 <?php  
+// IMPORTAR CONEXION
+require 'includes/App.php';
+use App\Propiedad;
 
 $id = $_GET['id'];
 $id = filter_var($id, FILTER_VALIDATE_INT);
-
 // Validar que la URL tenga un ID(INT)
 if(!$id) {
     header('Location: /');
 }
-
-/** DATA BASE */
-
-    // IMPORTAR CONEXION
-    require 'includes/App.php';
-
-    $db = conectarDB();
-
-    // CONSULTAR DATABASE
-    $query = "SELECT * FROM propiedades WHERE id = ${id}";
-
-    // LEER LA DATABASE
-    $resultado = mysqli_query($db, $query);
-
-    // COMPROBAR QUE RESULTADO SEA UN NUMERO EXISTENTE
-    if(!$resultado->num_rows){
-        header('Location: /');
-    };
-    
-    incluirTemplate('header');
-    
-    ?>
-
+$propiedad = Propiedad::find($id);
+incluirTemplate('header');
+?>
 <main class="contenedor seccion contenido-centrado relativo">
-    <?php 
-    $propi = mysqli_fetch_assoc($resultado);
-    ?>
         <div class="arrow">
             <a href="anuncios.php">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -42,28 +21,28 @@ if(!$id) {
                 </svg>
             </a>
         </div>
-        <h1 class="title-anuncio"><?php echo $propi['titulo']; ?></h1>
+        <h1 class="title-anuncio"><?php echo $propiedad->titulo; ?></h1>
 
-        <img loading="lazy" src="/imagenes/<?php echo $propi['imagen'];?>" alt="Imagen de la Propiedad">
+        <img loading="lazy" src="/imagenes/<?php echo $propiedad->imagen;?>" alt="Imagen de la Propiedad">
 
         <div class="resumen-propiedad">
-            <p class="precio">$ <?php echo $propi['precio']; ?></p>
+            <p class="precio">$ <?php echo $propiedad->precio; ?></p>
 
             <ul class="iconos-caracteristicas">
                 <li>
                     <img class="icono" src="build/img/icono_wc.svg" alt="icono_wc" loading="lazy">
-                    <p><?php echo $propi['wc']; ?></p>
+                    <p><?php echo $propiedad->wc; ?></p>
                 </li>
                 <li>
                     <img class="icono" src="build/img/icono_estacionamiento.svg" alt="icono icono_estacionamiento" loading="lazy">
-                    <p><?php echo $propi['estacionamiento']; ?></p>
+                    <p><?php echo $propiedad->estacionamiento; ?></p>
                 </li>  
                 <li>
                     <img class="icono" src="build/img/icono_dormitorio.svg" alt="icono_dormitorio" loading="lazy">
-                    <p><?php echo $propi['habitaciones']; ?></p>
+                    <p><?php echo $propiedad->habitaciones; ?></p>
                 </li>
             </ul>
-            <p><?php echo $propi['descripcion']; ?></p>
+            <p><?php echo $propiedad->descripcion; ?></p>
         </div>
     </main>
 
